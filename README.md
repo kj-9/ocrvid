@@ -25,7 +25,7 @@ To extract text from a video, run:
 
     ocrvid run path/to/video.mp4
 
-then ocrvid generates frames from the video and runs OCR on each frame. Frames are saved in a directory named `.frames/` in the same directory as the video. 
+then ocrvid generates frames from the video and runs OCR on each frame. Frames are saved in a directory named `.frames/` in the same directory as the video.
 
 The text is saved in a json file named `video.json` in the same directory as the video.
 `video.json` looks like this:
@@ -72,13 +72,13 @@ To download a YouTube video without audio, run:
     ocrvid youtube $video_id
 
 
-To get information about a YouTube plalylist from YouTube API, 
+To get information about a YouTube plalylist from YouTube API,
 you need to set `YOUTUBE_API_KEY` environment variable or store key by running:
-    
+
     ocrvid key set $key
-    
+
 You can see the path of the key file by running:
-    
+
     ocrvid key path
 
 

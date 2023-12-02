@@ -20,10 +20,7 @@ def test_key_path_command():
         os.environ["ocrvid_USER_PATH"] = str(Path.home() / "ocrvid-test")
         result = runner.invoke(cli, ["key", "path"])
         assert result.exit_code == 0
-        assert (
-            result.output
-            == str(Path.home() / "ocrvid-test" / ".ocrvid.json") + "\n"
-        )
+        assert result.output == str(Path.home() / "ocrvid-test" / ".ocrvid.json") + "\n"
 
 
 def test_keys_set_and_load():

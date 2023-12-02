@@ -1,6 +1,5 @@
 import logging
 import sys
-from pathlib import Path
 
 # default setting for logger
 logging.basicConfig(level=logging.INFO)

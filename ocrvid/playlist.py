@@ -5,7 +5,7 @@ from pathlib import Path
 import googleapiclient.discovery
 import googleapiclient.errors
 from serde import serde
-from serde.json import from_json, to_json
+from serde.json import to_json
 
 from ocrvid import get_key
 from ocrvid.config import get_logger
@@ -76,7 +76,6 @@ class Playlist:
         return list(map(lambda x: x.get("contentDetails").get("videoId"), self.items))  # type: ignore
 
     def to_json(self, output: Path) -> Path:
-
         if not output.parent.exists():
             output.parent.mkdir(parents=True)
 
