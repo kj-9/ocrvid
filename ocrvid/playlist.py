@@ -7,7 +7,6 @@ import googleapiclient.errors
 from serde import serde
 from serde.json import from_json, to_json
 
-import ocrvid as vo
 from ocrvid import get_key
 from ocrvid.config import get_logger
 
@@ -19,10 +18,6 @@ logger = get_logger(__name__)
 class Playlist:
     playlist_id: str
     items: t.List[dict] = field(default_factory=list)
-
-    @staticmethod
-    def get_json_file() -> Path:
-        return vo.config.DATA_DIR / "playlist.json"
 
     def __get_api(self) -> googleapiclient.discovery.Resource:
         YOUTUBE_API_KEY = get_key("YOUTUBE_API_KEY")
@@ -80,23 +75,14 @@ class Playlist:
     def to_video_ids(self) -> t.List[str]:
         return list(map(lambda x: x.get("contentDetails").get("videoId"), self.items))  # type: ignore
 
-    def to_json(self, output: t.Optional[Path] = None) -> Path:
-        if not output:
-            output = self.get_json_file()
+    def to_json(self, output: Path) -> Path:
 
-        output.parent.mkdir(parents=True, exist_ok=True)
+        if not output.parent.exists():
+            output.parent.mkdir(parents=True)
+
         s = to_json(self, indent=4)
 
         with open(output, "w") as f:
             f.write(s)
 
         return output
-
-    @classmethod
-    def from_json(cls) -> "Playlist":
-        json_file = cls.get_json_file()
-
-        with open(json_file) as f:
-            s = f.read()
-
-        return from_json(cls, s)
