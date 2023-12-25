@@ -186,7 +186,7 @@ def download_video(video_id, name, directory, force, resolution):
     type=str,
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
-def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):
+def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):  # noqa: PLR0913
     """Write a ocr json file from a video file"""
 
     # validate output is just a filename

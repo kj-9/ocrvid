@@ -22,7 +22,7 @@ class OCRResult:
     bbox: t.Tuple[float, float, float, float]  # x, y, weight, height
 
 
-def detect_text(
+def detect_text(  # noqa: PLR0913
     image_path: str,
     recognition_level: str = "accurate",
     orientation: t.Optional[int] = None,
