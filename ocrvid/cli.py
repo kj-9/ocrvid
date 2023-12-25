@@ -169,7 +169,15 @@ def download_video(video_id, name, directory, force, resolution):
     type=int,
     help="Number of frames per second to extract from the video",
 )
-def run_ocr(input_video, directory, frames_dir, frame_rate):
+@click.option(
+    "--langs",
+    "-l",
+    default=None,
+    multiple=True,
+    type=str,
+    help="Prefered languages to detect, ordered by priority. If not passed, language is auto detected",
+)
+def run_ocr(input_video, directory, frames_dir, frame_rate, langs):
     """Write a ocr json file from a video file"""
     output_file = Path(directory) / "video.json"
 
@@ -183,7 +191,7 @@ def run_ocr(input_video, directory, frames_dir, frame_rate):
         frame_rate=frame_rate,
     )
     video.gen_frame_files()
-    video.run_ocr()
+    video.run_ocr(langs=langs)
     video.to_json()
 
 @cli.command(name="langs")
