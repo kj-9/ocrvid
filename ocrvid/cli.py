@@ -4,7 +4,6 @@ from pathlib import Path
 import click
 
 from ocrvid import key_path
-from ocrvid.playlist import Playlist
 from ocrvid.video import Video
 
 
@@ -83,6 +82,8 @@ def write_playlist(playlist_id, name, directory, force):
     if output_path.exists() and not force:
         click.echo(f"{output_path} already exists. Use -f to overwrite")
         return
+
+    from ocrvid.playlist import Playlist
 
     playlist = Playlist(playlist_id)
     playlist.get_playlist()
@@ -219,3 +220,29 @@ def echo_supported_recognition_languages():
 
     for lang in ocrvid.ocr.supported_recognition_languages():
         click.echo(lang)
+
+
+@cli.command(name="detect")
+@click.argument(
+    "input_picture",
+    required=True,
+    type=click.Path(dir_okay=False),
+)
+@click.option(
+    "--langs",
+    "-l",
+    default=None,
+    multiple=True,
+    type=str,
+    help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
+)
+def detect_text(input_picture, langs):
+    """Detect text in a picture, and print the results as json array"""
+    from serde.json import to_json
+
+    from ocrvid.ocr import detect_text
+
+    results = detect_text(str(Path(input_picture)), languages=langs)
+
+    # pretty print results
+    click.echo(to_json(results, indent=4))
