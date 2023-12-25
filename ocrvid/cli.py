@@ -184,7 +184,7 @@ def download_video(video_id, name, directory, force, resolution):
     default=None,
     multiple=True,
     type=str,
-    help="Prefered languages to detect, ordered by priority. If not passed, language is auto detected",
+    help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
 def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):
     """Write a ocr json file from a video file"""
@@ -210,6 +210,7 @@ def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):
     video.gen_frame_files()
     video.run_ocr(langs=langs)
     video.to_json()
+
 
 @cli.command(name="langs")
 def echo_supported_recognition_languages():
