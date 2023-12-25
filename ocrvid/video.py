@@ -90,7 +90,7 @@ class Video:
         vid.release()
         cv2.destroyAllWindows()
 
-    def run_ocr(self, lang="ja") -> t.List[Frame]:
+    def run_ocr(self, langs: t.Optional[t.List[str]] = None) -> t.List[Frame]:
         if not self.frames_dir:
             raise ValueError("frames_dir is not set. needed to run ocr.")
 
@@ -104,7 +104,7 @@ class Video:
 
         logger.info("start OCR on frames...")
         for frame_file in frame_files:
-            results = detect_text(str(frame_file), languages=[lang])
+            results = detect_text(str(frame_file), languages=langs)
 
             if results:
                 frames.append(Frame(frame_file=frame_file, results=results))
