@@ -152,6 +152,13 @@ def download_video(video_id, name, directory, force, resolution):
     type=click.Path(dir_okay=False, writable=True),
 )
 @click.option(
+    "-o",
+    "--output",
+    default="video.json",
+    type=click.STRING,
+    help='Output json filename (without path). By default, the filename is "video.json"',
+)
+@click.option(
     "--directory",
     "-d",
     default=".",
@@ -179,9 +186,17 @@ def download_video(video_id, name, directory, force, resolution):
     type=str,
     help="Prefered languages to detect, ordered by priority. If not passed, language is auto detected",
 )
-def run_ocr(input_video, directory, frames_dir, frame_rate, langs):
+def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):
     """Write a ocr json file from a video file"""
-    output_file = Path(directory) / "video.json"
+
+    # validate output is just a filename
+    if "/" in output:
+        raise ValueError("output must be a filename, not a path")
+
+    if not output.endswith(".json"):
+        output += ".json"
+
+    output_file = Path(directory) / output
 
     if not frames_dir:
         frames_dir = Path(directory) / ".frames"
