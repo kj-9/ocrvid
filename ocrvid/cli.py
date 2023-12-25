@@ -147,20 +147,22 @@ def download_video(video_id, name, directory, force, resolution):
 
 @cli.command(name="run")
 @click.argument(
-    "input_video", required=True, type=click.Path(dir_okay=False, writable=True)
+    "input_video",
+    required=True,
+    type=click.Path(dir_okay=False, writable=True),
 )
 @click.option(
     "--directory",
     "-d",
     default=".",
     type=click.Path(file_okay=False, writable=True),
-    help="Directory to save the output file",
+    help="Directory to save the output file. By default, the current directory is used",
 )
 @click.option(
     "--frames-dir",
     "-fd",
     type=click.Path(file_okay=False, writable=True),
-    help="Directory to store frames",
+    help="Directory to store frames. By default, a `.frames/` is created in the output directory",
 )
 @click.option(
     "--frame-rate",
