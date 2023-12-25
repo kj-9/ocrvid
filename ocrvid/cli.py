@@ -185,3 +185,11 @@ def run_ocr(input_video, directory, frames_dir, frame_rate):
     video.gen_frame_files()
     video.run_ocr()
     video.to_json()
+
+@cli.command(name="langs")
+def echo_supported_recognition_languages():
+    """Show supported recognition languages"""
+    import ocrvid.ocr
+
+    for lang in ocrvid.ocr.supported_recognition_languages():
+        click.echo(lang)
