@@ -27,21 +27,26 @@ def detect_text(
     recognition_level: str = "accurate",
     orientation: t.Optional[int] = None,
     languages: t.Optional[t.List[str]] = None,
+    auto_detect_language: bool = True,
+    language_correction: bool = True,
+    minimum_text_height: t.Optional[float] = None,
 ) -> t.List[OCRResult]:
     """process image with VNRecognizeTextRequest and return results
 
+    Just a wrapper around FrameworkVNRecognizeTextRequest in Apple's Vision framework,
+    see also: https://developer.apple.com/documentation/vision/vnrecognizetextrequest?language=objc
     This code originally developed for https://github.com/RhetTbull/osxphotos
 
     Args:
         image_path: path to image to process
         recognition_level: "accurate" or "fast"
-        orientation: orientation of image, 1-8, see https://developer.apple.com/documentation/imageio/kcgimagepropertyorientation
-        languages: list of languages to recognize, e.g. ["en-US", "ja"]
-
+        orientation: orientation of image, 1-8, see also: https://developer.apple.com/documentation/imageio/kcgimagepropertyorientation
+        languages: list of languages to recognize, order of list is order of preference for recognition. Specify the languages as ISO language codes. e.g. ["en-US", "ja"]
+        auto_detect_language: automatically detect language
+        language_correction: use language correction
+        minimum_text_height: The minimum height, relative to the image height, of the text to recognize.
     """
 
-    if languages is None:
-        languages = ["en-US"]
     input_url = NSURL.fileURLWithPath_(image_path)
 
     """
@@ -75,8 +80,17 @@ def detect_text(
             Vision.VNRecognizeTextRequest.alloc().initWithCompletionHandler_(handler)
         )
 
-        vision_request.setRecognitionLanguages_(languages)
-        vision_request.setUsesLanguageCorrection_(True)
+        if languages is not None:
+            vision_request.setRecognitionLanguages_(languages)
+
+        if auto_detect_language:
+            vision_request.setAutomaticallyDetectsLanguage_(True)
+
+        if language_correction:
+            vision_request.setUsesLanguageCorrection_(True)
+
+        if minimum_text_height:
+            vision_request.setMinimumTextHeight_(minimum_text_height)
 
         if recognition_level == "fast":
             vision_request.setRecognitionLevel_(1)
