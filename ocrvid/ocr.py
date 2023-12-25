@@ -129,3 +129,19 @@ def make_request_handler(results):
                 )
 
     return handler
+
+
+def supported_recognition_languages() -> t.Tuple[str]:
+    """return list of supported recognition languages"""
+
+    with objc.autorelease_pool():
+        results: t.List[OCRResult] = []
+        handler = make_request_handler(results)
+        vision_request = (
+            Vision.VNRecognizeTextRequest.alloc().initWithCompletionHandler_(handler)
+        )
+
+        # [1] is passed arg i.g. None
+        languages = vision_request.supportedRecognitionLanguagesAndReturnError_(None)[0]
+
+        return languages
