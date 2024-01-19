@@ -9,13 +9,14 @@
 CLI tool to extract text from videos using OCR on macOS.
 
 
-
-
 ## Installation
 
 Install this tool using `pip`:
 
     pip install ocrvid
+
+> [!NOTE]
+> Currently, this tool only works on macOS.
 
 ## Usage
 
@@ -25,68 +26,86 @@ To extract text from a video, run:
 
     ocrvid run path/to/video.mp4
 
-then ocrvid generates frames from the video and runs OCR on each frame. Frames are saved in a directory named `.frames/` in the same directory as the video.
+then ocrvid generates frames from the video and runs OCR on each frame. Frames are saved in a directory named `.ocrvid/frames/video/` in the current directory.
 
-The text is saved in a json file named `video.json` in the same directory as the video.
-`video.json` looks like this:
+OCR results are saved in a json file named `video.json` in the current directory. (where `video` is taken from input file name `video`)
+
+for example, run against the test video file at `tests/video/pexels-eva-elijas.mp4` in this repo:
+
+```
+ocrvid run tests/video/pexels-eva-elijas.mp4
+```
+
+Then `pexels-eva-elija.json` is generated in the current directory which looks like this:
 
 ```json
 {
-    "video_file":"data/43TjPJ88xWU-worst.mp4",
-    "frames_dir":"data/.frames",
+    "video_file":"tests/video/pexels-eva-elijas.mp4",
+    "frames_dir":"xxx/.ocrvid/frames/pexels-eva-elijas",
     "frame_rate":100,
     "frames":[
         {
-            "frame_file":"data/.frames/frame-300.png",
+            "frame_file":"xxx/.ocrvid/frames/pexels-eva-elijas/frame-0.png",
             "results":[
                 {
-                    "text":"目的地",
-                    "confidence":0.5,
+                    "text":"INSPIRING WORDS",
+                    "confidence":1.0,
                     "bbox":[
-                        0.34375000234374997,
-                        0.6944444452380952,
-                        0.328125,
-                        0.2222222222222222
+                        0.17844826551211515,
+                        0.7961793736859821,
+                        0.3419540405273438,
+                        0.10085802570754931
                     ]
                 },
                 {
-                    "text":"福岡市博多区",
+                    "text":"\"Foar kills more dre",
                     "confidence":1.0,
                     "bbox":[
-                        0.062203050380895686,
-                        0.38636815776546085,
-                        0.852156400680542,
-                        0.3244859112633599
+                        0.0724226723609706,
+                        0.6839455987759758,
+                        0.4780927975972494,
+                        0.14592710683043575
                     ]
-                },}
+                },
+                {
+                    "text":"than failure ever",
+                    "confidence":1.0,
+                    "bbox":[
+                        0.018455287246445035,
+                        0.6549868414269003,
+                        0.45329265594482426,
+                        0.14363905857426462
+                    ]
+                },
+                {
+                    "text":"IZY KASSEM",
+                    "confidence":0.5,
+                    "bbox":[
+                        -0.015967150208537523,
+                        0.6675747977206025,
+                        0.23065692583719888,
+                        0.08114868486431293
+                    ]
+                },
+                {
+                    "text":"Entrepreneur",
+                    "confidence":1.0,
+                    "bbox":[
+                        0.01941176222542875,
+                        0.1353812367971159,
+                        0.9058370590209961,
+                        0.26137274083956863
+                    ]
+                }
+            ]
+        },
 ...
 ```
 
 
 ### Interact with YouTube
 
-`orcvid` has some commands to interact with YouTube.
-
-To download a YouTube video without audio, run:
-
-    ocrvid youtube $video_id
-
-
-To get information about a YouTube plalylist from YouTube API,
-you need to set `YOUTUBE_API_KEY` environment variable or store key by running:
-
-    ocrvid key set $key
-
-You can see the path of the key file by running:
-
-    ocrvid key path
-
-
-Once you set the key, you can run:
-
-    ocrvid youtube playlist $playlist_id
-
-This saves the information about the playlist in a json file named `playlist-{playlist_id}.json` in the current directory.
+Interacting YouTube? Please see [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
 
 ## Development
