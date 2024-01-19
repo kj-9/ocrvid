@@ -30,13 +30,16 @@ def test_run_command():
         assert result.exit_code == 0
         assert result.output != ""
 
+
 def test_run_command_with_custom_path():
     runner = CliRunner()
     with runner.isolated_filesystem():
         input_file = str(Path(__file__).parent / "video/pexels-eva-elijas.mp4")
-        result = runner.invoke(cli, ["run", input_file, "-o", "some/custom.json", "-fd", "custom-frame-dir"])
+        result = runner.invoke(
+            cli,
+            ["run", input_file, "-o", "some/custom.json", "-fd", "custom-frame-dir"],
+        )
 
         assert result.exit_code == 0
         assert (Path.cwd() / "some/custom.json").exists()
         assert (Path.cwd() / "custom-frame-dir").is_dir()
-

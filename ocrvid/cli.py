@@ -54,7 +54,6 @@ def run_ocr(input_video, output, frames_dir, frame_rate, langs):  # noqa: PLR091
     else:
         output = Path.cwd() / Path(input_video).with_suffix(".json").name
 
-
     if frames_dir:
         frames_dir = Path(frames_dir)
     else:
