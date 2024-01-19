@@ -20,22 +20,14 @@ def cli():
 @click.option(
     "-o",
     "--output",
-    default="video.json",
-    type=click.STRING,
-    help='Output json filename (without path). By default, the filename is "video.json"',
-)
-@click.option(
-    "--directory",
-    "-d",
-    default=".",
-    type=click.Path(file_okay=False, writable=True),
-    help="Directory to save the output file. By default, the current directory is used",
+    type=click.Path(dir_okay=False, writable=True),
+    help="Path to output json file. By default, if you run `ocrvid run some/video.mp4` then the output file will be `./video.json`",
 )
 @click.option(
     "--frames-dir",
     "-fd",
     type=click.Path(file_okay=False, writable=True),
-    help="Directory to store frames. By default, a `.frames/` is created in the output directory",
+    help="Directory to store frames. By default, `./.ocrvid/frames/{stem of output json}`",
 )
 @click.option(
     "--frame-rate",
@@ -52,20 +44,16 @@ def cli():
     type=str,
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
-def run_ocr(input_video, output, directory, frames_dir, frame_rate, langs):  # noqa: PLR0913
+def run_ocr(input_video, output, frames_dir, frame_rate, langs):  # noqa: PLR0913
     """Write a ocr json file from a video file"""
 
-    # validate output is just a filename
-    if "/" in output:
-        raise ValueError("output must be a filename, not a path")
-
-    if not output.endswith(".json"):
-        output += ".json"
-
-    output_file = Path(directory) / output
+    if not output:
+        # if output is not passed, then use the same file name as the input video
+        # but with a json extension, and in output to the current directory
+        output_file = Path.cwd() / Path(input_video).with_suffix(".json").name
 
     if not frames_dir:
-        frames_dir = Path(directory) / ".frames"
+        frames_dir = Path.cwd() / ".ocrvid/frames" / output_file.stem
 
     video = Video(
         output_file=Path(output_file),
