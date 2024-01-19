@@ -16,7 +16,7 @@ Install this tool using `pip`:
     pip install ocrvid
 
 > [!NOTE]
-> Currently, this tool only works on macOS.
+> Currently, this tool only teted on macOS 13 or later.
 
 ## Usage
 
