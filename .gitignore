@@ -10,5 +10,5 @@ venv
 *.egg-info
 .DS_Store
 
-data/
 build/
+.ocrvid
