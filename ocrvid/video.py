@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import cv2
-from pytube import YouTube
 from serde import field, serde
 from serde.json import to_json
 
@@ -30,38 +29,6 @@ class Video:
     frames: t.List[Frame] = field(default_factory=list)
 
     frame_prefix: t.ClassVar[str] = "frame-"  # prefix for frame files
-
-    @classmethod
-    def get_resolutions(cls, video_id: str) -> list:
-        yt = YouTube(f"https://www.youtube.com/watch?v={video_id}")
-
-        # for ocr, we only need the video
-        streams = yt.streams.filter(only_video=True)
-        return list(streams)
-
-    def download_video(self, video_id: str, resolution="worst") -> None:
-        if not self.video_file:
-            raise ValueError("video_file is not set. needed to save downloaded video.")
-
-        yt = YouTube(f"https://www.youtube.com/watch?v={video_id}")
-        logger.info(f"downloading video: {yt.title}")
-
-        streams = yt.streams.filter(only_video=True)
-
-        if resolution == "worst":
-            stream = streams.order_by("resolution").first()
-        elif resolution == "best":
-            stream = streams.order_by("resolution").last()
-        else:
-            # resolution should be an itag (int or str of int)
-            stream = yt.streams.get_by_itag(resolution)
-
-        if not self.video_file.parent.exists():
-            self.video_file.parent.mkdir(parents=True)
-
-        stream.download(
-            output_path=self.video_file.parent, filename=self.video_file.name
-        )
 
     def gen_frame_files(self):
         if not self.frames_dir.exists():

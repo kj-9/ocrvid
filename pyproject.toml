@@ -11,10 +11,8 @@ classifiers = [
 ]
 dependencies = [
     "click",
-    "google-api-python-client",
     "pyobjc-framework-Vision",
     "opencv-python",
-    "pytube",
     "pyserde"
 ]
 
