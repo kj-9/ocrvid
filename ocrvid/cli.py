@@ -47,16 +47,21 @@ def cli():
 def run_ocr(input_video, output, frames_dir, frame_rate, langs):  # noqa: PLR0913
     """Write a ocr json file from a video file"""
 
-    if not output:
+    if output:
+        output = Path(output)
         # if output is not passed, then use the same file name as the input video
         # but with a json extension, and in output to the current directory
-        output_file = Path.cwd() / Path(input_video).with_suffix(".json").name
+    else:
+        output = Path.cwd() / Path(input_video).with_suffix(".json").name
 
-    if not frames_dir:
-        frames_dir = Path.cwd() / ".ocrvid/frames" / output_file.stem
+
+    if frames_dir:
+        frames_dir = Path(frames_dir)
+    else:
+        frames_dir = Path.cwd() / ".ocrvid/frames" / output.stem
 
     video = Video(
-        output_file=Path(output_file),
+        output_file=Path(output),
         video_file=Path(input_video),
         frames_dir=Path(frames_dir),
         frame_rate=frame_rate,
