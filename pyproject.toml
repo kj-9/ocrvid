@@ -1,9 +1,9 @@
 [project]
 name = "ocrvid"
 version = "0.3.1"
-description = ""
+description = "CLI tool for OCR-ing video frames on macOS"
 readme = "README.md"
-authors = [{name = ""}]
+authors = [{name = "kj-9"}]
 license = {text = "Apache-2.0"}
 requires-python = ">=3.8"
 classifiers = [
