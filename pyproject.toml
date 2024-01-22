@@ -7,7 +7,7 @@ authors = [{name = "kj-9"}]
 license = {text = "Apache-2.0"}
 requires-python = ">=3.8"
 classifiers = [
-    "License :: OSI Approved :: Apache Software License"
+    "License :: OSI Approved :: Apache Software License",
 ]
 dependencies = [
     "click",
@@ -15,6 +15,7 @@ dependencies = [
     "opencv-python",
     "pyserde"
 ]
+keywords = ["ocr", "macos", "video", "movie", "cli"]
 
 [project.urls]
 Homepage = "https://github.com/kj-9/ocrvid"
