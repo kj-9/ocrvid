@@ -8,6 +8,9 @@ license = {text = "Apache-2.0"}
 requires-python = ">=3.8"
 classifiers = [
     "License :: OSI Approved :: Apache Software License",
+    "Development Status :: 3 - Alpha",
+    "Operating System :: MacOS :: MacOS X",
+    "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 dependencies = [
     "click",
