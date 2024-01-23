@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/ocrvid.svg)](https://pypi.org/project/ocrvid/)
 [![Changelog](https://img.shields.io/github/v/release/kj-9/ocrvid?include_prereleases&label=changelog)](https://github.com/kj-9/ocrvid/releases)
-[![Tests](https://github.com/kj-9/ocrvid/workflows/Test/badge.svg)](https://github.com/kj-9/ocrvid/actions?query=workflow%3ATest)
+[![Tests](https://github.com/kj-9/ocrvid/workflows/CI/badge.svg)](https://github.com/kj-9/ocrvid/actions?query=workflow%3ACI)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://github.com/kj-9/ocrvid/blob/master/LICENSE)
 
 
