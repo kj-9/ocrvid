@@ -30,11 +30,11 @@ def cli():
     help="Directory to store frames. By default, `./.ocrvid/frames/{stem of output json}`",
 )
 @click.option(
-    "--frame-rate",
-    "-fr",
+    "--frame-step",
+    "-fs",
     default=100,
     type=int,
-    help="Number of frames per second to extract from the video. Default is 100.",
+    help="Number of frames to skip between each frame to be processed. By default, 100 which means every 100 frames, 1 frame will be processed.",
 )
 @click.option(
     "--langs",
@@ -44,7 +44,7 @@ def cli():
     type=str,
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
-def run_ocr(input_video, output, frames_dir, frame_rate, langs):  # noqa: PLR0913
+def run_ocr(input_video, output, frames_dir, frame_step, langs):  # noqa: PLR0913
     """Write a ocr json file from a video file"""
 
     if output:
@@ -63,7 +63,7 @@ def run_ocr(input_video, output, frames_dir, frame_rate, langs):  # noqa: PLR091
         output_file=Path(output),
         video_file=Path(input_video),
         frames_dir=Path(frames_dir),
-        frame_rate=frame_rate,
+        frame_step=frame_step,
     )
     video.gen_frame_files()
     video.run_ocr(langs=langs)

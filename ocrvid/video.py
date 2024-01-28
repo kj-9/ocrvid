@@ -25,7 +25,7 @@ class Video:
     output_file: Path = field(default=None, skip=True)  # where to de/serialize
     video_file: t.Optional[Path] = None
     frames_dir: t.Optional[Path] = None
-    frame_rate: int = 100
+    frame_step: int = 100
     frames: t.List[Frame] = field(default_factory=list)
 
     frame_prefix: t.ClassVar[str] = "frame-"  # prefix for frame files
@@ -45,7 +45,7 @@ class Video:
             if not ret:
                 break
 
-            if index % self.frame_rate == 0:
+            if index % self.frame_step == 0:
                 file_name = f"{self.frame_prefix}{index}.png"
                 frame_path = self.frames_dir / file_name
 
