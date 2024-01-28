@@ -34,7 +34,7 @@ def cli():
     "-fr",
     default=100,
     type=int,
-    help="Number of frames per second to extract from the video",
+    help="Number of frames per second to extract from the video. Default is 100.",
 )
 @click.option(
     "--langs",
