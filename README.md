@@ -9,14 +9,19 @@
 CLI tool to extract text from videos using OCR on macOS.
 
 
+> [!NOTE]
+> Currently, this tool only tested and works on macOS 13 or later.
+
+
+> [!CAUTION]
+> This tool is still in early development stage. The API may change in the future.
+
 ## Installation
 
 Install this tool using `pip`:
 
     pip install ocrvid
 
-> [!NOTE]
-> Currently, this tool only teted on macOS 13 or later.
 
 ## Usage
 
@@ -42,7 +47,7 @@ Then `pexels-eva-elija.json` is generated in the current directory which looks l
 {
     "video_file":"tests/video/pexels-eva-elijas.mp4",
     "frames_dir":"xxx/.ocrvid/frames/pexels-eva-elijas",
-    "frame_rate":100,
+    "frame_step":100,
     "frames":[
         {
             "frame_file":"xxx/.ocrvid/frames/pexels-eva-elijas/frame-0.png",
