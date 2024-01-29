@@ -31,7 +31,7 @@ To extract text from a video, run:
 
     ocrvid run path/to/video.mp4
 
-then ocrvid generates frames from the video and runs OCR on each frame. Frames are saved in a directory named `.ocrvid/frames/video/` in the current directory.
+then ocrvid generates frames from the video and runs OCR on each frame. Optionaly, frames can be saved in a directory passed `--frames_dir / -fd`.
 
 OCR results are saved in a json file named `video.json` in the current directory. (where `video` is taken from input file name `video`)
 
