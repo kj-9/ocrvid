@@ -23,7 +23,7 @@ class OCRResult:
 
 
 def detect_text(  # noqa: PLR0913
-    image_path: str,
+    file_or_buffer: str | bytes,
     recognition_level: str = "accurate",
     orientation: t.Optional[int] = None,
     languages: t.Optional[t.List[str]] = None,
@@ -47,8 +47,6 @@ def detect_text(  # noqa: PLR0913
         minimum_text_height: The minimum height, relative to the image height, of the text to recognize.
     """
 
-    input_url = NSURL.fileURLWithPath_(image_path)
-
     """
     with pipes() as (out, err):
     # capture stdout and stderr from system calls
@@ -58,10 +56,20 @@ def detect_text(  # noqa: PLR0913
     # 2020-09-20 20:55:25.652 python[73042:5650492] Got the query meta data reply for: com.apple.MobileAsset.RawCamera.Camera, response: 0
         input_image = Quartz.CIImage.imageWithContentsOfURL_(input_url)
     """
-    image = Quartz.CIImage.imageWithContentsOfURL_(input_url)
 
     with objc.autorelease_pool():
         vision_options = NSDictionary.dictionaryWithDictionary_({})
+
+        if isinstance(file_or_buffer, str):
+            image_file = file_or_buffer
+            image_url = NSURL.fileURLWithPath_(image_file)
+            image = Quartz.CIImage.imageWithContentsOfURL_(image_url)
+        elif isinstance(file_or_buffer, bytes):
+            buffer = file_or_buffer
+            image = Quartz.CIImage.imageWithData_(buffer)
+        else:
+            raise TypeError("file_or_buffer must be str or bytes")
+
         if orientation is None:
             vision_handler = (
                 Vision.VNImageRequestHandler.alloc().initWithCIImage_options_(

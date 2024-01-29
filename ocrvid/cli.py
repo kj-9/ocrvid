@@ -27,7 +27,8 @@ def cli():
     "--frames-dir",
     "-fd",
     type=click.Path(file_okay=False, writable=True),
-    help="Directory to store frames. By default, `./.ocrvid/frames/{stem of output json}`",
+    default=None,
+    help="If passed, then save video frames to this directory. By default, frames are not saved.",
 )
 @click.option(
     "--frame-step",
@@ -56,17 +57,12 @@ def run_ocr(input_video, output, frames_dir, frame_step, langs):  # noqa: PLR091
 
     if frames_dir:
         frames_dir = Path(frames_dir)
-    else:
-        frames_dir = Path.cwd() / ".ocrvid/frames" / output.stem
 
     video = Video(
         output_file=Path(output),
         video_file=Path(input_video),
-        frames_dir=Path(frames_dir),
-        frame_step=frame_step,
     )
-    video.gen_frame_files()
-    video.run_ocr(langs=langs)
+    video.run_ocr(frame_step=frame_step, frames_dir=frames_dir, langs=langs)
     video.to_json()
 
 

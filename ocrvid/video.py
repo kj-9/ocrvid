@@ -15,7 +15,7 @@ logger = get_logger(__name__)
 @serde
 @dataclass
 class Frame:
-    frame_file: Path
+    frame_index: int
     results: t.List[OCRResult]
 
 
@@ -24,16 +24,10 @@ class Frame:
 class Video:
     output_file: Path = field(default=None, skip=True)  # where to de/serialize
     video_file: t.Optional[Path] = None
-    frames_dir: t.Optional[Path] = None
-    frame_step: int = 100
     frames: t.List[Frame] = field(default_factory=list)
-
     frame_prefix: t.ClassVar[str] = "frame-"  # prefix for frame files
 
-    def gen_frame_files(self):
-        if not self.frames_dir.exists():
-            self.frames_dir.mkdir(parents=True)
-
+    def frame_generator(self, frame_step: int):
         vid = cv2.VideoCapture(str(self.video_file))
         index = 0
 
@@ -45,36 +39,45 @@ class Video:
             if not ret:
                 break
 
-            if index % self.frame_step == 0:
-                file_name = f"{self.frame_prefix}{index}.png"
-                frame_path = self.frames_dir / file_name
-
-                cv2.imwrite(str(frame_path), frame)
+            if index % frame_step == 0:
+                yield index, frame
 
             index += 1
 
-        logger.info("finished converting image to frames.")
         vid.release()
         cv2.destroyAllWindows()
 
-    def run_ocr(self, langs: t.Optional[t.List[str]] = None) -> t.List[Frame]:
-        if not self.frames_dir:
-            raise ValueError("frames_dir is not set. needed to run ocr.")
+    def run_ocr(
+        self,
+        frame_step: int,
+        frames_dir: t.Optional[Path] = None,
+        langs: t.Optional[t.List[str]] = None,
+    ) -> t.List[Frame]:
+        """Run OCR on frames and return a list of Frame objects
+
+        Args:
+            frames_dir (Path, optional): where to save frames. Defaults to None i.e. not save frames.
+            langs (t.Optional[t.List[str]], optional): prefered languages to detect, ordered by priority. Defaults to None i.e. auto detect.
+        """
 
         frames = []
 
-        # glob all frames and sort by name
-        frame_files = list(self.frames_dir.glob(f"{self.frame_prefix}*.png"))
-
-        # sort by number in filename
-        frame_files = sorted(frame_files, key=lambda f: int(f.stem.split("-")[-1]))
+        if frames_dir and not frames_dir.exists():
+            frames_dir.mkdir(parents=True)
 
         logger.info("start OCR on frames...")
-        for frame_file in frame_files:
-            results = detect_text(str(frame_file), languages=langs)
+        for index, frame in self.frame_generator(frame_step):
+            buffer = cv2.imencode(".png", frame)[1].tobytes()
+
+            results = detect_text(buffer, languages=langs)
+
+            if frames_dir:
+                frame_file = frames_dir / f"{self.frame_prefix}{index}.png"
+                with open(frame_file, "wb") as f:
+                    f.write(buffer)
 
             if results:
-                frames.append(Frame(frame_file=frame_file, results=results))
+                frames.append(Frame(frame_index=index, results=results))
 
         logger.info("completed OCR on frames.")
 
