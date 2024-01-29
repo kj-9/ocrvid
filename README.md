@@ -46,11 +46,9 @@ Then `pexels-eva-elija.json` is generated in the current directory which looks l
 ```json
 {
     "video_file":"tests/video/pexels-eva-elijas.mp4",
-    "frames_dir":"xxx/.ocrvid/frames/pexels-eva-elijas",
-    "frame_step":100,
     "frames":[
         {
-            "frame_file":"xxx/.ocrvid/frames/pexels-eva-elijas/frame-0.png",
+            "frame_index":0,
             "results":[
                 {
                     "text":"INSPIRING WORDS",
