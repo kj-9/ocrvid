@@ -1,6 +1,6 @@
 [project]
 name = "ocrvid"
-version = "0.4.0"
+version = "0.5.0"
 description = "CLI tool for OCR-ing video frames on macOS"
 readme = "README.md"
 authors = [{name = "kj-9"}]
