@@ -23,7 +23,7 @@ class OCRResult:
 
 
 def detect_text(  # noqa: PLR0913
-    file_or_buffer: str | bytes,
+    file_or_buffer:  t.Union[str, bytes],
     recognition_level: str = "accurate",
     orientation: t.Optional[int] = None,
     languages: t.Optional[t.List[str]] = None,
