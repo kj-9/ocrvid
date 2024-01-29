@@ -14,7 +14,7 @@ CLI tool to extract text from videos using OCR on macOS.
 
 
 > [!CAUTION]
-> This tool is still in early development stage. The API may change in the future.
+> This tool is still in early development stage. Current v0.x releases are not stable and may have breaking changes.
 
 ## Installation
 
