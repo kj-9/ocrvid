@@ -14,19 +14,18 @@ def test_lang_command():
     assert result.output != ""
 
 
-def test_run_command():
+def test_run_command_with_frames_dir():
     runner = CliRunner()
     with runner.isolated_filesystem():
         input_file = str(Path(__file__).parent / "video/pexels-eva-elijas.mp4")
-        result = runner.invoke(cli, ["run", input_file])
+        frames_dir_str = ".ocrvid/frames/pexels-eva-elijas"
+        result = runner.invoke(cli, ["run", input_file, "-fd", frames_dir_str])
 
         assert result.exit_code == 0
         assert (Path.cwd() / "pexels-eva-elijas.json").exists()
-        assert (Path.cwd() / ".ocrvid/frames/pexels-eva-elijas").is_dir()
+        assert (Path.cwd() / frames_dir_str).is_dir()
 
-        result = runner.invoke(
-            cli, ["detect", ".ocrvid/frames/pexels-eva-elijas/frame-0.png"]
-        )
+        result = runner.invoke(cli, ["detect", f"{frames_dir_str}/frame-0.png"])
         assert result.exit_code == 0
         assert result.output != ""
 
