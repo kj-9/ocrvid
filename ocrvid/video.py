@@ -55,6 +55,31 @@ class Video:
 
                 index += 1
 
+    def get_props(self) -> dict[str, t.Any]:
+        with VideoCapture(str(self.video_file)) as vid:
+
+            def get_or_none(prop: int):
+                v = vid.get(prop)
+                return None if v == 0 else v
+
+            width = get_or_none(cv2.CAP_PROP_FRAME_WIDTH)
+            height = get_or_none(cv2.CAP_PROP_FRAME_HEIGHT)
+            frame_count = get_or_none(cv2.CAP_PROP_FRAME_COUNT)
+            fps = get_or_none(cv2.CAP_PROP_FPS)
+
+        seconds = None
+        if frame_count and fps:
+            seconds = frame_count / fps
+
+        props = {
+            "frame_count": frame_count,
+            "fps": fps,
+            "seconds": seconds,
+            "width": width,
+            "height": height,
+        }
+        return props
+
     def run_ocr(
         self,
         frame_step: int,

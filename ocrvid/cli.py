@@ -99,3 +99,17 @@ def detect_text(input_picture, langs):
 
     # pretty print results
     click.echo(to_json(results, indent=4))
+
+
+@cli.command(name="props")
+@click.argument(
+    "input_video",
+    required=True,
+    type=click.Path(dir_okay=False),
+)
+def show_props(input_video):
+    """Print video properties"""
+    from ocrvid.video import Video
+
+    video = Video(video_file=Path(input_video))
+    click.echo(video.get_props())
