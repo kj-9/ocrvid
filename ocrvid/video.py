@@ -1,4 +1,5 @@
 import typing as t
+from contextlib import contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -19,6 +20,16 @@ class Frame:
     results: t.List[OCRResult]
 
 
+@contextmanager
+def VideoCapture(*args, **kwargs):
+    cap = cv2.VideoCapture(*args, **kwargs)
+    try:
+        yield cap
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
+
+
 # @serde
 @dataclass
 class Video:
@@ -28,24 +39,21 @@ class Video:
     frame_prefix: t.ClassVar[str] = "frame-"  # prefix for frame files
 
     def frame_generator(self, frame_step: int):
-        vid = cv2.VideoCapture(str(self.video_file))
-        index = 0
+        with VideoCapture(str(self.video_file)) as vid:
+            index = 0
 
-        logger.info("start converting image to frames...")
-        while vid.isOpened():
-            ret, frame = vid.read()
+            logger.info("start converting image to frames...")
+            while vid.isOpened():
+                ret, frame = vid.read()
 
-            # end of video
-            if not ret:
-                break
+                # end of video
+                if not ret:
+                    break
 
-            if index % frame_step == 0:
-                yield index, frame
+                if index % frame_step == 0:
+                    yield index, frame
 
-            index += 1
-
-        vid.release()
-        cv2.destroyAllWindows()
+                index += 1
 
     def run_ocr(
         self,
