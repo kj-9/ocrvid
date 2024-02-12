@@ -64,7 +64,7 @@ class Video:
 
                 index += 1
 
-    def get_props(self) -> dict[str, t.Optional[float]]:
+    def get_props(self) -> t.Dict[str, t.Optional[float]]:
         """
         Retrieve the properties of the video file.
 
