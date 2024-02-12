@@ -25,17 +25,70 @@ Install this tool using `pip`:
 
 ## Usage
 
+<!-- [[[cog
+import cog
+from ocrvid import cli
+from click.testing import CliRunner
+runner = CliRunner()
+result = runner.invoke(cli.cli, ["--help"])
+help = result.output.replace("Usage: cli", "Usage: ocrvid")
+cog.out(
+    f"```\n{help}\n```"
+)
+]]] -->
+```
+Usage: ocrvid [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version  Show the version and exit.
+  --help     Show this message and exit.
+
+Commands:
+  detect  Run OCR on a single picture, and print the results as json
+  langs   Show supported recognition languages
+  props   Show properties of video file
+  run     Run OCR on a video, and save result as a json file
+
+```
+<!-- [[[end]]] -->
+
 ### Run OCR on a video
 
-To extract text from a video, run:
+Use `ocr run` sub command to run ocr on a video file:
 
-    ocrvid run path/to/video.mp4
+<!-- [[[cog
+runner = CliRunner()
+result = runner.invoke(cli.cli, ["run", "--help"])
+help = result.output.replace("Usage: cli", "Usage: ocrvid")
+cog.out(
+    f"```\n{help}\n```"
+)
+]]] -->
+```
+Usage: ocrvid run [OPTIONS] INPUT_VIDEO
 
-then ocrvid generates frames from the video and runs OCR on each frame. Optionaly, frames can be saved in a directory passed `--frames_dir / -fd`.
+  Run OCR on a video, and save result as a json file
 
-OCR results are saved in a json file named `video.json` in the current directory. (where `video` is taken from input file name `video`)
+Options:
+  -o, --output FILE            Path to output json file. By default, if you run
+                               `ocrvid run some/video.mp4` then the output file
+                               will be `./video.json`
+  -fd, --frames-dir DIRECTORY  If passed, then save video frames to this
+                               directory. By default, frames are not saved.
+  -fs, --frame-step INTEGER    Number of frames to skip between each frame to be
+                               processed. By default, 100 which means every 100
+                               frames, 1 frame will be processed.
+  -bs, --by-second FLOAT       If passed, then process 1 frame every N seconds.
+                               This option relies on fps metadata of the video.
+  -l, --langs TEXT             Prefered languages to detect, ordered by
+                               priority. See avalable languages run by `ocrvid
+                               langs`. If not passed, language is auto detected.
+  --help                       Show this message and exit.
 
-for example, run against the test video file at `tests/video/pexels-eva-elijas.mp4` in this repo:
+```
+<!-- [[[end]]] -->
+
+For example, run against the test video file at `tests/video/pexels-eva-elijas.mp4` in this repo:
 
 ```
 ocrvid run tests/video/pexels-eva-elijas.mp4
@@ -106,9 +159,56 @@ Then `pexels-eva-elija.json` is generated in the current directory which looks l
 ```
 
 
-### Interact with YouTube
+### Show supported languages
 
-Interacting YouTube? Please see [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+You can run `ocrvid langs` to show supported languages to detect.
+Results can be different from your macos version.
+
+On macOS version:
+<!-- [[[cog
+import platform
+cog.out(
+    f"""```\n{platform.mac_ver()[0]=}\n```""")
+]]] -->
+```
+platform.mac_ver()[0]='14.2.1'
+```
+<!-- [[[end]]] -->
+
+
+Result of `ocrvid langs`:
+<!-- [[[cog
+runner = CliRunner()
+result = runner.invoke(cli.cli, ["langs"])
+help = result.output.replace("Usage: cli", "Usage: ocrvid")
+cog.out(
+    f"```\n{help}\n```"
+)
+]]] -->
+```
+en-US
+fr-FR
+it-IT
+de-DE
+es-ES
+pt-BR
+zh-Hans
+zh-Hant
+yue-Hans
+yue-Hant
+ko-KR
+ja-JP
+ru-RU
+uk-UA
+th-TH
+vi-VT
+
+```
+<!-- [[[end]]] -->
+
+## How can I run OCR on YouTube videos?
+
+Take a look at [yt-dlp](https://github.com/yt-dlp/yt-dlp).
 
 
 ## Development

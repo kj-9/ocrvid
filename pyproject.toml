@@ -1,6 +1,6 @@
 [project]
 name = "ocrvid"
-version = "0.5.1"
+version = "0.5.2"
 description = "CLI tool for OCR-ing video frames on macOS"
 readme = "README.md"
 authors = [{name = "kj-9"}]
@@ -30,7 +30,7 @@ CI = "https://github.com/kj-9/ocrvid/actions"
 ocrvid = "ocrvid.cli:cli"
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "cog"]
 dev = ["pre-commit"]
 
 [tool.setuptools]

@@ -38,3 +38,5 @@ jobs:
           pip install pre-commit
       - name: Run pre-commit
         run: make pre-commit
+      - name: Check if cog needs to be run
+        run: cog --check README.md
