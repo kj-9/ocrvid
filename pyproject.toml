@@ -30,7 +30,7 @@ CI = "https://github.com/kj-9/ocrvid/actions"
 ocrvid = "ocrvid.cli:cli"
 
 [project.optional-dependencies]
-test = ["pytest", "cog"]
+test = ["pytest", "cogapp"]
 dev = ["pre-commit"]
 
 [tool.setuptools]
