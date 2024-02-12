@@ -1,6 +1,6 @@
 .PHONY: install
 install:
-	pip install -e '.[test,dev]'
+	pip install -e '.[test]'
 
 .PHONY: pre-commit
 pre-commit:
