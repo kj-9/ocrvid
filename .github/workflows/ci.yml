@@ -22,21 +22,10 @@ jobs:
       - name: Install dependencies
         run: |
           pip install '.[test,dev]'
-      - name: Run tests
-        run: |
-          make test
-  lint:
-    runs-on: ubuntu-latest # lint only requires pre-commit, so not requires macOS
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - name: Install dependencies # runs on ubuntu, so only install pre-commit
-        run: |
-          pip install pre-commit
       - name: Run pre-commit
         run: make pre-commit
       - name: Check if cog needs to be run
-        run: cog --check README.md
+        run: cog --check README.md # cog needs to be run on macos because using ocrvid
+      - name: Run tests
+        run: |
+          make test
