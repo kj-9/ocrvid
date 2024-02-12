@@ -41,5 +41,5 @@ jobs:
         run: |
           pip install '.[test]'
       - name: Run pre-commit
-        run: make pre-commit      
+        run: make pre-commit
       # not run `cog --check README.md` here since `ocrvid langs` outputs different result accross macos platform.
