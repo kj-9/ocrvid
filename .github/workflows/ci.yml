@@ -41,6 +41,5 @@ jobs:
         run: |
           pip install '.[test]'
       - name: Run pre-commit
-        run: make pre-commit
-      - name: Check if cog needs to be run
-        run: cog --check README.md # cog needs to be run on macos because using ocrvid
+        run: make pre-commit      
+      # not run `cog --check README.md` here since `ocrvid langs` outputs different result accross macos platform.
