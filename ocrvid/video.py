@@ -55,7 +55,7 @@ class Video:
 
                 index += 1
 
-    def get_props(self) -> dict[str, t.Any]:
+    def get_props(self) -> dict[str, t.Optional[float]]:
         with VideoCapture(str(self.video_file)) as vid:
 
             def get_or_none(prop: int):
@@ -82,7 +82,8 @@ class Video:
 
     def run_ocr(
         self,
-        frame_step: int,
+        frame_step: t.Optional[int] = None,
+        by_second: t.Optional[int] = None,
         frames_dir: t.Optional[Path] = None,
         langs: t.Optional[t.List[str]] = None,
     ) -> t.List[Frame]:
@@ -93,13 +94,30 @@ class Video:
             langs (t.Optional[t.List[str]], optional): prefered languages to detect, ordered by priority. Defaults to None i.e. auto detect.
         """
 
-        frames = []
+        if by_second:
+            fps = self.get_props()["fps"]
+
+            if not fps or fps <= 0:
+                raise ValueError(
+                    f"Invalid fps: {fps}. This video file may not have fps as metadata."
+                )
+
+            frame_step = int(fps * by_second)
+
+            if frame_step <= 0:
+                raise ValueError(
+                    f"Invalid frame_step: {frame_step}. by_second may be too small."
+                )
+
+            logger.info(f"{frame_step=}, calucated from: {fps=} * {by_second=}.")
 
         if frames_dir and not frames_dir.exists():
             frames_dir.mkdir(parents=True)
 
+        frames = []
+
         logger.info("start OCR on frames...")
-        for index, frame in self.frame_generator(frame_step):
+        for index, frame in self.frame_generator(frame_step):  # type: ignore
             buffer = cv2.imencode(".png", frame)[1].tobytes()
 
             results = detect_text(buffer, languages=langs)

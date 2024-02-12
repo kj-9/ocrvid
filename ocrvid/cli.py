@@ -33,9 +33,16 @@ def cli():
 @click.option(
     "--frame-step",
     "-fs",
-    default=100,
+    default=None,
     type=int,
     help="Number of frames to skip between each frame to be processed. By default, 100 which means every 100 frames, 1 frame will be processed.",
+)
+@click.option(
+    "--by-second",
+    "-bs",
+    default=None,
+    type=float,
+    help="If passed, then process 1 frame every N seconds. This option relies on fps metadata of the video.",
 )
 @click.option(
     "--langs",
@@ -45,14 +52,20 @@ def cli():
     type=str,
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
-def run_ocr(input_video, output, frames_dir, frame_step, langs):  # noqa: PLR0913
+def run_ocr(input_video, output, frames_dir, frame_step, by_second, langs):  # noqa: PLR0913
     """Write a ocr json file from a video file"""
+
+    if frame_step and by_second:
+        raise ValueError("frame_step and by_second cannot be provided together.")
+
+    if not frame_step and not by_second:
+        frame_step = 100  # default frame step
 
     if output:
         output = Path(output)
+    else:
         # if output is not passed, then use the same file name as the input video
         # but with a json extension, and in output to the current directory
-    else:
         output = Path.cwd() / Path(input_video).with_suffix(".json").name
 
     if frames_dir:
@@ -62,7 +75,10 @@ def run_ocr(input_video, output, frames_dir, frame_step, langs):  # noqa: PLR091
         output_file=Path(output),
         video_file=Path(input_video),
     )
-    video.run_ocr(frame_step=frame_step, frames_dir=frames_dir, langs=langs)
+
+    video.run_ocr(
+        frame_step=frame_step, by_second=by_second, frames_dir=frames_dir, langs=langs
+    )
     video.to_json()
 
 
