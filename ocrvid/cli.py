@@ -53,8 +53,8 @@ def cli():
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
 def run_ocr(input_video, output, frames_dir, frame_step, by_second, langs):  # noqa: PLR0913
-    """Write a ocr json file from a video file"""
-
+    """
+    Run OCR on a video, and save result as a json file"""
     if frame_step and by_second:
         raise ValueError("frame_step and by_second cannot be provided together.")
 
@@ -106,7 +106,7 @@ def echo_supported_recognition_languages():
     help="Prefered languages to detect, ordered by priority. See avalable languages run by `ocrvid langs`. If not passed, language is auto detected.",
 )
 def detect_text(input_picture, langs):
-    """Detect text in a picture, and print the results as json array"""
+    """Run OCR on a single picture, and print the results as json"""
     from serde.json import to_json
 
     from ocrvid.ocr import detect_text
@@ -124,7 +124,7 @@ def detect_text(input_picture, langs):
     type=click.Path(dir_okay=False),
 )
 def show_props(input_video):
-    """Print video properties"""
+    """Show properties of video file"""
     from ocrvid.video import Video
 
     video = Video(video_file=Path(input_video))
