@@ -162,7 +162,7 @@ Then `pexels-eva-elija.json` is generated in the current directory which looks l
 ### Show supported languages
 
 You can run `ocrvid langs` to show supported languages to detect.
-Results can be different from your macos version.
+Results may change depending on running macos version.
 
 On macOS version:
 <!-- [[[cog
