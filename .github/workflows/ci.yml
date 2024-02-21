@@ -12,6 +12,10 @@ jobs:
       matrix:
         os: ["macos-13", "macos-14"]
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        exclude:
+          # actions/setup-python@v4 does not support python 3.8 and 3.9 on macos-14 (arm64)
+          - os: "macos-14"
+            python-version: ["3.8", "3.9"]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
