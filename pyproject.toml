@@ -16,7 +16,7 @@ dependencies = [
     "click",
     "pyobjc-framework-Vision",
     "opencv-python",
-    "pyserde"
+    "pyserde<0.14" # has breaking changes in 0.14: https://github.com/yukinarit/pyserde/releases/tag/v0.14.0
 ]
 keywords = ["ocr", "macos", "video", "movie", "cli"]
 
