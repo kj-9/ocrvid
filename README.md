@@ -54,7 +54,7 @@ Commands:
 
 ### Run OCR on a video
 
-Use `ocr run` sub command to run ocr on a video file:
+Use `ocrvid run` sub command to run ocr on a video file:
 
 <!-- [[[cog
 runner = CliRunner()
